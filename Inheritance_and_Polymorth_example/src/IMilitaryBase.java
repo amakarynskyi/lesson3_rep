@@ -1,4 +1,5 @@
 public interface IMilitaryBase {
+    int servicemanHealth = 40;
     int infantryHealth = 200;
     int cavalryHealth = 400;
     int medicHealth = 120;
@@ -10,5 +11,5 @@ public interface IMilitaryBase {
     int trainingPoints = 5;
 
     void attack(Serviceman serviceman);
-    String[] rangArray = {"Serviceman", "Infantry", "Medic", "Cavalry"};
+    String[] rangArray = new String[]{"Infantry", "Cavalry", "Medic"};
 }

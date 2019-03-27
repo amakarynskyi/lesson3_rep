@@ -1,30 +1,39 @@
-public class Infantry extends Serviceman implements IMilitaryBase{
-    private String weapon;
-    private int hitPoints;
+import static java.lang.System.*;
 
-    public int getHitPoints() {
+public class Infantry extends Serviceman implements IMilitaryBase{
+    private int hitPoints;
+    private int currentHealth;
+
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+    public void setCurrentHealth(int currentHealth) {
+        this.currentHealth = currentHealth;
+    }
+    private int getHitPoints() {
         return hitPoints;
     }
-
-    public void setHitPoints(int hitPoints) {
+    private void setHitPoints(int hitPoints) {
         this.hitPoints = hitPoints;
     }
 
-    public Infantry(int health, int hitPoints) {
+    Infantry(int health, int hitPoints) {
         super(health);
         setWeapon("Bow");
         this.hitPoints = hitPoints;
-        System.out.println("New infantry was created. Having health = " + getHealth());
+        this.currentHealth = IMilitaryBase.infantryHealth;
+        out.println("New infantry was created. Having health = " + getMaxHealth());
     }
 
+    @Override
     public void attack(Serviceman enemy) {
-        System.out.println("Infantry is attacking!");
-        enemy.setHealth(enemy.getHealth() - getHitPoints());
+        out.println("Infantry is attacking!");
+        enemy.setCurrentHealth(enemy.getCurrentHealth() - this.getHitPoints());
     }
 
     @Override
     public void train() {
-        System.out.println("I'm ready to shoot some targets!");
+        out.println("I'm ready to shoot some targets!");
         setHitPoints(getHitPoints() + trainingPoints);
     }
 }

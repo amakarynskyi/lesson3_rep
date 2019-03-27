@@ -1,41 +1,44 @@
+import static java.lang.System.*;
+
 abstract public class Main{
     public static void main(String[] args){
         Medic medic = new Medic(IMilitaryBase.medicHealth, IMilitaryBase.medicHitPoints, IMilitaryBase.medicHealPoints);
         Infantry infantry = new Infantry(IMilitaryBase.infantryHealth, IMilitaryBase.infantryHitPoints);
         Cavalry cavalry = new Cavalry(IMilitaryBase.cavalryHealth, IMilitaryBase.cavalryHitPoints);
         Infantry enemy = new Infantry(IMilitaryBase.infantryHealth, IMilitaryBase.infantryHitPoints);
-
-        Serviceman[] warriorArray = {medic, cavalry, infantry};
+        Serviceman serviceman_2 = new Serviceman(IMilitaryBase.servicemanHealth);   // object created just for example
+                                                                                    // and is not used in program
+        Serviceman[] warriorArray = {infantry, cavalry, medic};
 
         Serviceman serviceman = new Serviceman();
-        serviceman.train(IMilitaryBase.rangArray[1]);
+        serviceman.train(IMilitaryBase.rangArray[1]);   // here we call for Base class .train method
+
+        // here Child classes' .train methods will be called
         for ( Serviceman man: warriorArray){
             man.train();
-            System.out.println("I will take my " + man.getWeapon());
+            out.println("I will take my " + man.getWeapon());
         }
 
-        System.out.println("\n--- Enemy attacks!!! ---\n");
+        out.println("\n--- Alarm! The enemy unit is attacking!!! ---\n");
         enemy.attack(infantry);
-        System.out.println("--- The infantry was injured and has " + infantry.getHealth() + " points of health now.");
+        out.println("--- The infantry was wounded and has " + infantry.getCurrentHealth() + " points of health now.\n");
 
         int pAttack = 1;
         do {
-            System.out.println("Attack # " + pAttack);
+            out.println("========= Attack # " + pAttack + " =========");
             for (Serviceman warrior : warriorArray) {
                 warrior.attack(enemy);
-                if (enemy.getHealth() <= 0) {
-                    enemy.setHealth(IMilitaryBase.ZERO);
-                    System.out.println("--- The enemy was killed.\n");
+                if (enemy.getCurrentHealth() <= 0) {
+                    enemy.setCurrentHealth(IMilitaryBase.ZERO);
+                    out.println("--- The enemy unit was killed.\n");
                     break;
                 }
-                System.out.println("--- Enemy has " + enemy.getHealth() + " health points left ");
+                out.println("--- Enemy unit has " + enemy.getCurrentHealth() + " health points left\n");
             }
             pAttack++;
-        }while(0 != enemy.getHealth());
+        }while(0 != enemy.getCurrentHealth());
 
-        do{
-            medic.heal(infantry);
-        }while (infantry.getHealth() < IMilitaryBase.infantryHealth);
-        medic.heal(cavalry);
+        medic.heal( infantry );   // really heals a wounded man
+        medic.heal(cavalry);    // tries to heal NOT wounded one
     }
 }

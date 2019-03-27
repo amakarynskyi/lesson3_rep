@@ -1,35 +1,43 @@
+import static java.lang.System.*;
+
 public class Serviceman implements IMilitaryBase{
     private String weapon;
-    private int health = 40;
+    private int maxHealth = 40;
     private int hitPoints = 10;
+    private int currentHealth;
 
-    public String getWeapon() {
+    String getWeapon() {
         return weapon;
     }
-
-    public void setWeapon(String weapon) {
+    void setWeapon(String weapon) {
         this.weapon = weapon;
     }
-
-    public Serviceman() {
-        System.out.println("\nHail to the King! \nNew Serviceman was created. With default health =" + getHealth());
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+    public void setCurrentHealth(int currentHealth) {
+        this.currentHealth = currentHealth;
+    }
+    int getMaxHealth() {
+        return maxHealth;
+    }
+    private void setMaxHealth(int health) {
+        this.maxHealth = health;
     }
 
-    public Serviceman(int health) {
-        this.health = health;
-        System.out.println("\nReady to serve!");
+    Serviceman() {
+        out.println("\nHail to the King! \nDefault serviceman was created. Default health =" + getMaxHealth() + "\n");
+        this.currentHealth = this.maxHealth;
+    }
+    Serviceman(int health) {
+        this.maxHealth = health;
+        this.currentHealth = this.maxHealth;
+        out.println("\nReady to serve! \t// Base constructor was called");
     }
 
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public void train (String rang){
-        System.out.println("I want to become a good " + rang);
+    void train(String rang){
+        out.println("I want to become a good " + rang);
+        this.setMaxHealth(this.getMaxHealth() + 10);
 //        if (rang.equals("Infantry")){
 //            Infantry infantry = new Infantry(infantryHealth, infantryHitPoints);
 //        }
@@ -41,10 +49,10 @@ public class Serviceman implements IMilitaryBase{
 //        }
     }
     public void attack(Serviceman enemy){
-        enemy.setHealth(enemy.getHealth() - hitPoints);
-    };
+        enemy.setCurrentHealth(enemy.getCurrentHealth() - hitPoints);
+    }
 
     public void train(){
-        System.out.println("Yes, sir! I go to run a marathon.");
+        out.println("Yes, sir! I go to run a marathon.");
     }
 }

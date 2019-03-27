@@ -1,67 +1,65 @@
-import com.sun.istack.internal.NotNull;
+import static java.lang.System.*;
 
 public class Medic extends Serviceman implements IMilitaryBase{
     private int hitPoints;
     private int healPoints;
+    private int currentHealth;
 
-    public int getHealPoints() {
+    @Override
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+    @Override
+    public void setCurrentHealth(int currentHealth) {
+        this.currentHealth = currentHealth;
+    }
+    private int getHealPoints() {
         return healPoints;
     }
-
-    public void setHealPoints(int healPoints) {
+    private void setHealPoints(int healPoints) {
         this.healPoints = healPoints;
     }
 
-    public Medic(int health, int hitPoints, int healPoints) {
+    Medic(int health, int hitPoints, int healPoints) {
         super(health);
         setWeapon("Scalpel");
         this.hitPoints = hitPoints;
         this.healPoints = healPoints;
-        System.out.println("New medic was created. Having health = " + getHealth());
+        this.currentHealth = IMilitaryBase.medicHealth;
+        out.println("New medic was created. Having health = " + getMaxHealth());
     }
 
-    public void heal(Serviceman patient){
-        if (patient instanceof Cavalry && patient.getHealth() < cavalryHealth){
-            patient.setHealth(patient.getHealth() + getHealPoints());
-            if (patient.getHealth() > cavalryHealth) {
-                patient.setHealth(cavalryHealth);
-                noTreat();
+    void heal(Serviceman patient){
+        out.println("----- Medic commences to heal the " + patient.getClass().getName());
+        do {
+            if (patient.getCurrentHealth() < patient.getMaxHealth()) {
+                patient.setCurrentHealth(patient.getCurrentHealth() + getHealPoints());
+                report(patient);
+                if (patient.getCurrentHealth() > patient.getMaxHealth()) {
+                    patient.setCurrentHealth(patient.getMaxHealth());
+                    noTreat();
+                }
             }
-            report(patient);
-        }
-        else if (patient instanceof Infantry && patient.getHealth() < infantryHealth){
-            patient.setHealth(patient.getHealth() + getHealPoints());
-            if (patient.getHealth() > infantryHealth) {
-                patient.setHealth(infantryHealth);
-                noTreat();
-            }
-            report(patient);
-        }
-        else if (patient instanceof Cavalry && patient.getHealth() < medicHealth){
-            patient.setHealth(patient.getHealth() + getHealPoints());
-            if (patient.getHealth() > medicHealth) {
-                patient.setHealth(medicHealth);
-                noTreat();
-            }
-            report(patient);
-        }
-        else System.out.println("You are already in good condition.");
+            else out.println("You are already in good condition.");
+        }while (patient.getCurrentHealth() < patient.getMaxHealth());
     }
 
     private void noTreat(){
-        System.out.println("There is no need in treating you anymore.");
+        out.println("There is no need in treating you anymore.\n");
     }
     private void report(Serviceman patient){
-        System.out.println("After heal a patient has " + patient.getHealth() + " points of health");
+        out.println("After a healing session a patient has " + patient.getCurrentHealth() + " points of health");
     }
+
+    @Override
     public void attack(Serviceman enemy) {
-        System.out.println("Medic is attacking!");
-        enemy.setHealth(enemy.getHealth() - hitPoints);
+        out.println("Medic is attacking!");
+        enemy.setCurrentHealth(enemy.getCurrentHealth() - hitPoints);
     }
 
     @Override
     public void train() {
-        System.out.println("Let's cut a dummy!");
+        out.println("Let's cut a dummy!");
         setHealPoints(getHealPoints() + trainingPoints);
     }
 }
